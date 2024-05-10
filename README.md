@@ -1,1 +1,2 @@
-# pemdas-chess
+# Target
+Final project, python chess game.
