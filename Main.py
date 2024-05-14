@@ -10,7 +10,7 @@ IMAGES = {}
 def loadimages():
     pieces = ['bB', 'bK', 'bN', 'bp', 'bQ', 'bR', 'wB', 'wK', 'wN', 'wp', 'wQ', 'wR']
     for piece in pieces:
-        IMAGES[piece] = p.transform.scale(p.image.load('pieces/' + piece + '.png'), SQ_SIZE, SQ_SIZE)
+        IMAGES[piece] = p.transform.scale(p.image.load('pieces/' + piece + '.png'), (SQ_SIZE, SQ_SIZE))
         #UNTUK MEMANGGIL BISA DENGAN IMAGES['wp]
 
 def main():
@@ -18,7 +18,7 @@ def main():
     screen = p.display.set_mode((LEBAR, TINGGI))
     clock = p.time.Clock()
     screen.fill(p.Color('white'))
-    GS = ChessEngine.GameState()
+    gs = ChessEngine.GameState()
     loadimages()
     running = True
     while running:
@@ -34,11 +34,20 @@ def drawGameState(screen, gs):
     drawPieces(screen, gs.board)
 
 def drawBoard(screen):
-    colors = [p.Color('white', p.Color('gray'))]
-    for r in range(DIMENSI):
-        for c in range(DIMENSI):
-            color = colors[((r+c) % 2)]
-            p.draw.rect(screen, color, p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+    colors = [p.Color('white'), p.Color('gray')]
+    for baris in range(DIMENSI):
+        for kolom in range(DIMENSI):
+            color = colors[((baris+kolom) % 2)]
+            p.draw.rect(screen, color, p.Rect(kolom*SQ_SIZE, baris*SQ_SIZE, SQ_SIZE, SQ_SIZE))
 
 def drawPieces(screen, board):
-    pass
+    for baris in range(DIMENSI):
+        for kolom in range(DIMENSI):
+            piece = board[baris][kolom]
+            if piece != '--': #ada pion
+                #blit untuk menggambar pada screen(memasukkan pion)
+                screen.blit(IMAGES[piece], p.Rect(kolom*SQ_SIZE, baris*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+
+
+if __name__ == '__main__':
+    main()
