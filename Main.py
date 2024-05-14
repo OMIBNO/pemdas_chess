@@ -32,3 +32,13 @@ def main():
 def drawGameState(screen, gs):
     drawBoard(screen)
     drawPieces(screen, gs.board)
+
+def drawBoard(screen):
+    colors = [p.Color('white', p.Color('gray'))]
+    for r in range(DIMENSI):
+        for c in range(DIMENSI):
+            color = colors[((r+c) % 2)]
+            p.draw.rect(screen, color, p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+
+def drawPieces(screen, board):
+    pass
