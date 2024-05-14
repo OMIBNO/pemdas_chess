@@ -9,4 +9,5 @@ IMAGES = {}
 
 def loadimages():
     pieces = ['bB', 'bK', 'bN', 'bp', 'bQ', 'bR', 'wB', 'wK', 'wN', 'wp', 'wQ', 'wR']
-    IMAGES[piece] = p.image.load('pieces/' + piece + '.png')
+    for piece in pieces:
+        IMAGES[piece] = p.image.load('pieces/' + piece + '.png')
