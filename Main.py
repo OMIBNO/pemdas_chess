@@ -1,75 +1,110 @@
 """
-File utama
+MAIN MENU UNTUK PROGRAM CATUR
 """
-import pygame as p
-import ChessEngine
 
-LEBAR = TINGGI = 512
-DIMENSI = 8
-SQ_SIZE = TINGGI // DIMENSI
-MAX_FPS = 15
-IMAGES = {}
+import customtkinter as ctk
+import ChessMain
 
-def loadimages():
-    pieces = ['bB', 'bK', 'bN', 'bp', 'bQ', 'bR', 'wB', 'wK', 'wN', 'wp', 'wQ', 'wR']
-    for piece in pieces:
-        IMAGES[piece] = p.transform.scale(p.image.load('pieces/' + piece + '.png'), (SQ_SIZE, SQ_SIZE))
-        #UNTUK MEMANGGIL BISA DENGAN IMAGES['wp]
+"""
+THEME
+"""
+ctk.set_appearance_mode("Dark")
+ctk.set_default_color_theme("dark-blue")
 
-def main():
-    p.init()
-    screen = p.display.set_mode((LEBAR, TINGGI))
-    clock = p.time.Clock()
-    screen.fill(p.Color('white'))
-    gs = ChessEngine.GameState()
-    loadimages()
-    running = True
-    sqSelected = () #untuk mengetahui klik terbaru
-    playerClicks = [] #untuk mengetahui clicks, seperti click history
-    while running:
-        for e in p.event.get():
-            if e.type == p.QUIT:
-                running = False
-            elif e.type == p.MOUSEBUTTONDOWN:
-                location = p.mouse.get_pos() #untuk deteksi cursor
-                col1 = location[0]//SQ_SIZE
-                row1 = location[1]//SQ_SIZE
-                if sqSelected == (col1, row1): #klik kotak yg sama 2x
-                    sqSelected = () #deselect
-                    playerClicks = [] #untuk clear klik
-                else:
-                    sqSelected = (row1, col1)
-                    playerClicks.append(sqSelected)
-                if len(playerClicks) == 2:
-                    move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
-                    print(move.getChessNotation())
-                    gs.makeMove(move)
-                    sqSelected = () #reset user click
-                    playerClicks = []
+"""
+LOGIN
+"""
+def login():
+    global login_nama1, login_password1, login_window
+    login_window =ctk.CTk()
+    login_window.title('Login')
+    login_window.geometry('500x350')
+    login_window.resizable(0,0)
+    space_empty = ctk.CTkLabel(login_window,
+                                         text='')
+    space_empty1 = ctk.CTkLabel(login_window,
+                                         text='')
+    login_nama = ctk.CTkLabel(login_window,
+                                           text='Nama',
+                                           font=('Arial', 20, 'bold'),
+                                           )
+    login_nama1 = ctk.CTkEntry(login_window,
+                                         placeholder_text='username',
+                                         font=('Arial', 15),
+                                         width=220,
+                                         height=30)
+    login_password = ctk.CTkLabel(login_window,
+                                            text='Password',
+                                            font=('Arial', 20, 'bold'))
+    login_password1 = ctk.CTkEntry(login_window,
+                                         placeholder_text='password',
+                                         font=('Arial', 15),
+                                         width=220,
+                                         height=30)
+    login_button = ctk.CTkButton(login_window,
+                                           text='login',
+                                           font=('Arial',18),
+                                           height=35,
+                                           width=80,
+                                           command=proses_login)
+    login_label = ctk.CTkLabel(login_window,text='USER= kelompok1 PW= chess',
+                                        font=('Arial',24,'bold'))
+    space_empty.pack(pady=6)
+    login_label.pack()
+    login_nama.pack(pady=2, padx=141, anchor='w')
+    login_nama1.pack(pady=5, padx=20)
+    login_password.pack(pady=2, padx=141, anchor='w')
+    login_password1.pack(pady=2, padx=20)
+    login_button.pack(pady=28)
+    login_window.mainloop()
 
-        drawGameState(screen, gs)
-        clock.tick(MAX_FPS)
-        p.display.flip()
+def proses_login():
+    username = login_nama1.get()
+    password = login_password1.get()
+    if username == 'kelompok1' and password == 'chess':
+        login_window.destroy()
+        menu()
+    else:
+        print('error occured while login')
 
-def drawGameState(screen, gs):
-    drawBoard(screen)
-    drawPieces(screen, gs.board)
+def menu():
+    global app
+    app = ctk.CTk()
+    app.title('PEMDAS CHESS GAME')
+    app.geometry('800x520')
+    app.minsize(800, 520)
+    app.resizable(True,True)
 
-def drawBoard(screen):
-    colors = [p.Color('white'), p.Color('gray')]
-    for row in range(DIMENSI):
-        for col in range(DIMENSI):
-            color = colors[((row+col) % 2)]
-            p.draw.rect(screen, color, p.Rect(col*SQ_SIZE, row*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+    s_app = ctk.CTkScrollableFrame(app,
+                                        width=800,
+                                        height=1000)
+    menu_utama_label = ctk.CTkLabel(s_app,text='GAME CHESS KELOMPOK 1',
+                                        font=('Arial',43,'bold'))
+    s_app.pack(padx=10, pady=10, expand=True, fill='both')
+    menu_utama_label.pack()
 
-def drawPieces(screen, board):
-    for row in range(DIMENSI):
-        for col in range(DIMENSI):
-            piece = board[row][col]
-            if piece != '--': #ada pion
-                #blit untuk menggambar pada screen(memasukkan pion)
-                screen.blit(IMAGES[piece], p.Rect(col*SQ_SIZE, row*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+    ctk.CTkButton(s_app,
+              text="PLAY",
+              font=('Arial', 20),
+              command=lambda: ChessMain.main(),
+              width=200,
+              height=50,
+              border_width=2.9,
+              border_color='#0B0C0C',
+              corner_radius=10).pack(pady=5)
+    ctk.CTkButton(s_app,
+              text="EXIT",
+              font=('Arial', 20),
+              command=lambda: ChessMain.exit(),
+              width=200,
+              height=50,
+              border_width=2.9,
+              border_color='#0B0C0C',
+              corner_radius=10).pack(pady=5)
+    app.mainloop()
 
+def keluar():
+    app.destroy()
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    login()

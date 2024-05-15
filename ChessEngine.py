@@ -8,15 +8,23 @@ class GameState():
             ['--', '--', '--', '--', '--', '--', '--', '--'],
             ['--', '--', '--', '--', '--', '--', '--', '--'],
             ['wp', 'wp', 'wp', 'wp', 'wp', 'wp', 'wp', 'wp'],
-            ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR'],
+            ['wR', 'wN', 'wB', 'wK', 'wQ', 'wB', 'wN', 'wR'],
         ]
         self.whiteToMove = True
         self.moveLog = []
+
     def makeMove(self, move):
         self.board[move.startRow][move.startCol] = '--' #membuat kotak jadi kosong(karena pion berpindah)
         self.board[move.endRow][move.endCol] = move.pieceMoved
         self.moveLog.append(move) #dibuat history supaya bisa undo
         self.whiteToMove = not self.whiteToMove #ganti giliran
+
+    def undoMove(self):
+        if len(self.moveLog) != 0:#JIKA SUDAH ADA GERAKAN
+            move = self.moveLog.pop()
+            self.board[move.startRow][move.startCol] = move.pieceMoved
+            self.board[move.endRow][move.endCol] = move.pieceCaptured
+            self.whiteToMove = not self.whiteToMove #MENGGANTI GILIRAN
 
 class Move():
 # maps keys to values
@@ -32,7 +40,7 @@ class Move():
         self.endRow = endSq[0]
         self.endCol = endSq[1]
         self.pieceMoved = board[self.startRow][self.startCol]
-        self.pieceEaten = board[self.endRow][self.endCol]
+        self.pieceCaptured = board[self.endRow][self.endCol]
 
     def getChessNotation(self):
         return self.getRankFile(self.startRow, self.startCol) + self.getRankFile(self.endRow, self.endCol)
