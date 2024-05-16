@@ -1,15 +1,16 @@
 class GameState():
     def __init__(self):
         self.board = [
-            ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
+            ['bR', 'bN', 'bB', 'bK', 'bQ', 'bB', 'bN', 'bR'],
             ['bp', 'bp', 'bp', 'bp', 'bp', 'bp', 'bp', 'bp'],
+            ['--', '--', '--', '--', 'wp', '--', '--', '--'],
             ['--', '--', '--', '--', '--', '--', '--', '--'],
-            ['--', '--', '--', '--', '--', '--', '--', '--'],
-            ['--', '--', '--', '--', '--', '--', '--', '--'],
+            ['--', '--', '--', 'bp', '--', '--', '--', '--'],
             ['--', '--', 'bp', '--', '--', '--', '--', '--'],
             ['wp', 'wp', 'wp', 'wp', 'wp', 'wp', 'wp', 'wp'],
             ['wR', 'wN', 'wB', 'wK', 'wQ', 'wB', 'wN', 'wR'],
         ]
+        self.moveFunctions = {'p':self.getPawnMoves, 'R':self.getRookMoves, 'N':self.getKnightMoves, 'B':self.getBishopMoves, 'Q':self.getQueenMoves, 'K':self.getKingMoves}
         self.whiteToMove = True
         self.moveLog = []
 
@@ -32,23 +33,21 @@ class GameState():
     
     #ALL MOVES WITHOUT CONSIDERING CHECKS
     def getAllPossibleMoves(self):
-        moves = [Move((6,4), (4,4), self.board)]
+        moves = []
         for row in range(len(self.board)):
-            for col in range(len(self.board)):
+            for col in range(len(self.board[row])):
                 turn = self.board[row][col][0]
                 if (turn == 'w' and self.whiteToMove) or (turn == 'b' and not self.whiteToMove):
                     piece = self.board[row][col][1]
-                    if piece == 'p': #pawn
-                        self.getPawnMoves(row, col, moves)
-                    elif piece == 'R': #rook
-                        self.getRookMoves(row, col, moves)
+                    print(self.whiteToMove)
+                    self.moveFunctions[piece](row, col, moves)
         return moves
 
     """
     GET PAWN MOVES
     """
     def getPawnMoves(self, row, col, moves):
-        if self.whiteToMove:
+        if self.whiteToMove: #For white pawn
             if self.board[row-1][col] == '--': #Pawn, 1 square advance, to blank square
                 moves.append(Move((row, col), (row-1, col), self.board))
                 if row == 6 and self.board[row-2][col] == '--': #2 square advance
@@ -59,11 +58,30 @@ class GameState():
             if col+1 <= 7: #Capture to the right
                 if self.board[row-1][col+1][0] == 'b': #black pawn
                     moves.append(Move((row, col), (row-1, col+1), self.board))
+        else: #For black pawn
+            if self.board[row+1][col] == '--':#1 square advance
+                moves.append(Move((row, col), (row+1, col), self.board))
+                if row == 1 and self.board[row+2][col] == '--':#2 square advance
+                    moves.append(Move((row, col), (row+2, col), self.board))
+            if col-1 >= 0:#Capture to the left
+                if self.board[row+1][col-1][0] == 'w':#white pawn
+                    moves.append(Move((row, col), (row+1, col-1), self.board))
+            if col+1 <= 7:#Capture to the right
+                if self.board[row+1][col+1][0] == 'w':#white pawn
+                    moves.append(Move((row, col), (row+1, col+1), self.board))
 
     """
     GET ROOK MOVES
     """
     def getRookMoves(self, row, col, moves):
+        pass
+    def getKnightMoves(self, row, col, moves):
+        pass
+    def getBishopMoves(self, row, col, moves):
+        pass
+    def getQueenMoves(self, row, col, moves):
+        pass
+    def getKingMoves(self, row, col, moves):
         pass
 
 class Move():

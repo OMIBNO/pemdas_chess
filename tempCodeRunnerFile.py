@@ -22,7 +22,7 @@ def main():
     clock = p.time.Clock()
     screen.fill(p.Color('white'))
     gs = ChessEngine.GameState()
-    validMoves = gs.getValidMoves()
+    validMoves = gs.getAllPossibleMoves()
     moveMade = False
 
     loadimages()
@@ -30,21 +30,19 @@ def main():
     sqSelected = () #untuk mengetahui klik terbaru
     playerClicks = [] #untuk mengetahui clicks, seperti click history
     p.event.get()
-
     while running:
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
-            #mouse handler
             elif e.type == p.MOUSEBUTTONDOWN:
                 location = p.mouse.get_pos() #untuk deteksi cursor
-                col = location[0]//SQ_SIZE
-                row = location[1]//SQ_SIZE
-                if sqSelected == (row, col): #klik kotak yg sama 2x
+                col1 = location[0]//SQ_SIZE
+                row1 = location[1]//SQ_SIZE
+                if sqSelected == (col1, row1): #klik kotak yg sama 2x
                     sqSelected = () #deselect
                     playerClicks = [] #untuk clear klik
                 else:
-                    sqSelected = (row, col)
+                    sqSelected = (row1, col1)
                     playerClicks.append(sqSelected)
                 if len(playerClicks) == 2:
                     move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
@@ -61,7 +59,6 @@ def main():
                     moveMade = True
 
         if moveMade:
-            validMoves = gs.getValidMoves()
             gs.getValidMoves()
             moveMade = False
 
