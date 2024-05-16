@@ -6,7 +6,7 @@ class GameState():
             ['--', '--', '--', '--', '--', '--', '--', '--'],
             ['--', '--', '--', '--', '--', '--', '--', '--'],
             ['--', '--', '--', '--', '--', '--', '--', '--'],
-            ['--', '--', '--', '--', '--', '--', '--', '--'],
+            ['--', '--', 'bp', '--', '--', '--', '--', '--'],
             ['wp', 'wp', 'wp', 'wp', 'wp', 'wp', 'wp', 'wp'],
             ['wR', 'wN', 'wB', 'wK', 'wQ', 'wB', 'wN', 'wR'],
         ]
@@ -36,7 +36,7 @@ class GameState():
         for row in range(len(self.board)):
             for col in range(len(self.board)):
                 turn = self.board[row][col][0]
-                if (turn == 'w' and self.whiteToMove) and (turn == 'b' and not self.whiteToMove):
+                if (turn == 'w' and self.whiteToMove) or (turn == 'b' and not self.whiteToMove):
                     piece = self.board[row][col][1]
                     if piece == 'p': #pawn
                         self.getPawnMoves(row, col, moves)
@@ -47,13 +47,23 @@ class GameState():
     """
     GET PAWN MOVES
     """
-    def getPawnMoves(row, col, moves):
-        pass
+    def getPawnMoves(self, row, col, moves):
+        if self.whiteToMove:
+            if self.board[row-1][col] == '--': #Pawn, 1 square advance, to blank square
+                moves.append(Move((row, col), (row-1, col), self.board))
+                if row == 6 and self.board[row-2][col] == '--': #2 square advance
+                    moves.append(Move((row,col), (row-2, col), self.board)) 
+            if col-1 >= 0: #Capture to the left
+                if self.board[row-1][col-1][0] == 'b': #black pawn
+                    moves.append(Move((row, col), (row-1, col-1), self.board))
+            if col+1 <= 7: #Capture to the right
+                if self.board[row-1][col+1][0] == 'b': #black pawn
+                    moves.append(Move((row, col), (row-1, col+1), self.board))
 
     """
     GET ROOK MOVES
     """
-    def getRookMoves(row, col, moves):
+    def getRookMoves(self, row, col, moves):
         pass
 
 class Move():
