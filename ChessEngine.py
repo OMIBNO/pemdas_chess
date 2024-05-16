@@ -26,6 +26,36 @@ class GameState():
             self.board[move.endRow][move.endCol] = move.pieceCaptured
             self.whiteToMove = not self.whiteToMove #MENGGANTI GILIRAN
 
+    #ALL MOVES CONSIDERING CHECKS
+    def getValidMoves(self):
+        return self.getAllPossibleMoves()
+    
+    #ALL MOVES WITHOUT CONSIDERING CHECKS
+    def getAllPossibleMoves(self):
+        moves = [Move((6,4), (4,4), self.board)]
+        for row in range(len(self.board)):
+            for col in range(len(self.board)):
+                turn = self.board[row][col][0]
+                if (turn == 'w' and self.whiteToMove) and (turn == 'b' and not self.whiteToMove):
+                    piece = self.board[row][col][1]
+                    if piece == 'p': #pawn
+                        self.getPawnMoves(row, col, moves)
+                    elif piece == 'R': #rook
+                        self.getRookMoves(row, col, moves)
+        return moves
+
+    """
+    GET PAWN MOVES
+    """
+    def getPawnMoves(row, col, moves):
+        pass
+
+    """
+    GET ROOK MOVES
+    """
+    def getRookMoves(row, col, moves):
+        pass
+
 class Move():
 # maps keys to values
 # key : value
@@ -41,7 +71,17 @@ class Move():
         self.endCol = endSq[1]
         self.pieceMoved = board[self.startRow][self.startCol]
         self.pieceCaptured = board[self.endRow][self.endCol]
+        self.moveID = self.startRow * 1000 + self.startCol * 100 + self.endRow * 10 + self.endCol
+        print(self.moveID)
 
+    """
+    OVERRIDING THE EQUALS METHOD
+    """
+    def __eq__(self, other):
+        if isinstance(other, Move):
+            return self.moveID == other.moveID
+        return False
+    
     def getChessNotation(self):
         return self.getRankFile(self.startRow, self.startCol) + self.getRankFile(self.endRow, self.endCol)
     

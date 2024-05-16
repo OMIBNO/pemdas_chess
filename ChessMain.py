@@ -22,6 +22,9 @@ def main():
     clock = p.time.Clock()
     screen.fill(p.Color('white'))
     gs = ChessEngine.GameState()
+    validMoves = gs.getAllPossibleMoves()
+    moveMade = False
+
     loadimages()
     running = True
     sqSelected = () #untuk mengetahui klik terbaru
@@ -44,14 +47,19 @@ def main():
                 if len(playerClicks) == 2:
                     move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
                     print(move.getChessNotation())
-                    gs.makeMove(move)
+                    if move in validMoves:
+                        gs.makeMove(move)
+                        moveMade = True
                     sqSelected = () #reset user click
                     playerClicks = []
             #key handlers
             elif e.type == p.KEYDOWN:
                 if e.key == p.K_z: #JIKA Z DIPENCET
                     gs.undoMove()
-
+                    moveMade = True
+        if moveMade:
+            gs.getValidMoves()
+            moveMade = False
         drawGameState(screen, gs)
         clock.tick(MAX_FPS)
         p.display.flip()
