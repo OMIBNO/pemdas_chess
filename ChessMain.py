@@ -87,7 +87,7 @@ def drawPieces(screen, board):
 
 def drawSidebar(screen, gs):
     sidebar_rect = p.Rect(TINGGI, 0, SIDEBAR_WIDTH, TINGGI)
-    p.draw.rect(screen, p.Color('lightgray'), sidebar_rect)
+    p.draw.rect(screen, p.Color('lightgreen'), sidebar_rect)
 
     # Set up fonts
     font = p.font.SysFont('Inter', 24)
@@ -107,12 +107,12 @@ def drawSidebar(screen, gs):
         
         if i < len(gs.moveLog):
             # Display White's move
-            white_move_surface = small_font.render(gs.moveLog[i].getChessNotation(), True, p.Color('black'))
+            white_move_surface = small_font.render(gs.moveLog[i].getChessNotation(), True, p.Color('white'))
             screen.blit(white_move_surface, (TINGGI + 50, move_y))
         
         if i + 1 < len(gs.moveLog):
             # Display Black's move
-            black_move_surface = small_font.render(gs.moveLog[i + 1].getChessNotation(), True, p.Color('darkgray'))
+            black_move_surface = small_font.render(gs.moveLog[i + 1].getChessNotation(), True, p.Color('black'))
             screen.blit(black_move_surface, (TINGGI + 150, move_y))
 
         move_y += 30

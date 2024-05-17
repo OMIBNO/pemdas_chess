@@ -74,15 +74,83 @@ class GameState():
     GET ROOK MOVES
     """
     def getRookMoves(self, row, col, moves):
-        pass
+        directions = ((-1, 0), (0, -1), (1, 0), (0, 1)) #up, left, down, right
+        enemyColor = 'b' if self.whiteToMove else 'w'
+        for d in directions:
+            for i in range(1, 8):
+                endRow = row + d[0] * i
+                endCol = col + d[1] * i
+                if 0 <= endRow < 8 and 0 <= endCol < 8: # on board
+                    endPiece = self.board[endRow][endCol]
+                    if endPiece == '--': # empty space valid
+                        moves.append(Move((row, col), (endRow, endCol), self.board))
+                    elif endPiece[0] == enemyColor: #enemy piece valid
+                        moves.append(Move((row, col), (endRow, endCol), self.board))
+                        break
+                    else: # friendly piece invalid
+                        break
+                else: #off board
+                    break
+
+    
+    """
+    GET KNIGHT MOVES
+    """
     def getKnightMoves(self, row, col, moves):
-        pass
+        knightMoves = ((-2, -1), (-2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2), (2, -1), (2, 1))
+        allyColor = 'w' if self.whiteToMove else 'b'
+        for m in knightMoves:
+            endRow = row + m[0]
+            endCol = col + m[1]
+            if 0 <= endRow < 8 and 0 <= endCol < 8:
+                endPiece = self.board[endRow][endCol]
+                if endPiece[0] != allyColor: #not an ally piece(empty or enemy piece)
+                    moves.append(Move((row, col), (endRow, endCol), self.board))
+    
+    """
+    GET BISHOP MOVES
+    """
     def getBishopMoves(self, row, col, moves):
-        pass
+        directions = ((-1, -1), (-1, 1), (1, -1), (1, 1)) #4 diagonal
+        enemyColor = 'b' if self.whiteToMove else 'w'
+        for d in directions:
+            for i in range(1, 8): #bishop can move max of 7 squares
+                endRow = row + d[0] * i
+                endCol = col + d[1] * i
+                if 0 <= endRow < 8 and 0 <= endCol < 8: #is it on board
+                    endPiece = self.board[endRow][endCol]
+                    if endPiece == '--': #empty space valid
+                        moves.append(Move((row, col), (endRow, endCol), self.board))
+                    elif endPiece[0] == enemyColor: #enemy piece valid
+                        moves.append(Move((row, col), (endRow, endCol), self.board))
+                        break
+                    else: #friendly piece invalid
+                        break
+                else:
+                    break
+
+    """
+    GET QUEEN MOVES
+    """
     def getQueenMoves(self, row, col, moves):
-        pass
+        self.getRookMoves(row, col, moves)
+        self.getBishopMoves(row, col, moves)
+
+    """
+    GET KING MOVES
+    """
     def getKingMoves(self, row, col, moves):
-        pass
+        kingMoves = ((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1))
+        allyColor = 'w' if self.whiteToMove else 'b'
+        for i in range(8):
+            endRow = row + kingMoves[i][0]
+            endCol = col + kingMoves[i][1]
+            if 0 <= endRow < 8 and 0 <= endCol < 8:
+                endPiece = self.board[endRow][endCol]
+                if endPiece[0] != allyColor: #not an ally piece( empyty or enemy piece)
+                    moves.append(Move((row, col), (endRow, endCol), self.board))
+
+
 
 class Move():
 # maps keys to values
