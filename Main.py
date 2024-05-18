@@ -1,6 +1,6 @@
 import pygame
 import ChessMain
-
+import customtkinter as ctk
 # Initialize Pygame
 pygame.init()
 
@@ -12,15 +12,65 @@ kanade_img = pygame.transform.scale(pygame.image.load('img/bg.png'), (800, 520))
 
 # Set up fonts
 font_large = pygame.font.Font(None, 43)
-font_normal = pygame.font.Font(None, 20)
+font_normal = pygame.font.Font(None, 22)
 
-# Set up the screen
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 520
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption('PEMDAS CHESS GAME')
 
-clock = pygame.time.Clock()
+
+"""
+LOGIN
+"""
+def login():
+    global login_nama1, login_password1, login_window
+    login_window =ctk.CTk()
+    login_window.title('Login')
+    login_window.geometry('500x350')
+    login_window.resizable(0,0)
+    space_empty = ctk.CTkLabel(login_window,
+                                         text='')
+    space_empty1 = ctk.CTkLabel(login_window,
+                                         text='')
+    login_nama = ctk.CTkLabel(login_window,
+                                           text='Nama',
+                                           font=('Inter', 20, 'bold'),
+                                           )
+    login_nama1 = ctk.CTkEntry(login_window,
+                                         placeholder_text='username',
+                                         font=('Inter', 15),
+                                         width=220,
+                                         height=30)
+    login_password = ctk.CTkLabel(login_window,
+                                            text='Password',
+                                            font=('Inter', 20, 'bold'))
+    login_password1 = ctk.CTkEntry(login_window,
+                                         placeholder_text='password',
+                                         font=('Inter', 15),
+                                         width=220,
+                                         height=30)
+    login_button = ctk.CTkButton(login_window,
+                                           text='login',
+                                           font=('Inter',18),
+                                           height=35,
+                                           width=80,
+                                           command=proses_login)
+    login_label = ctk.CTkLabel(login_window,text='USER= kelompok1 PW= chess',
+                                        font=('Inter',24,'bold'))
+    space_empty.pack(pady=6)
+    login_label.pack()
+    login_nama.pack(pady=2, padx=141, anchor='w')
+    login_nama1.pack(pady=5, padx=20)
+    login_password.pack(pady=2, padx=141, anchor='w')
+    login_password1.pack(pady=2, padx=20)
+    login_button.pack(pady=28)
+    login_window.mainloop()
+
+def proses_login():
+    username = login_nama1.get()
+    password = login_password1.get()
+    if username == 'kelompok1' and password == 'chess':
+        login_window.destroy()
+        menu()
+    else:
+        print('error occured while login')
 
 def draw_text(text, font, color, x, y):
     text_surface = font.render(text, True, color)
@@ -29,6 +79,14 @@ def draw_text(text, font, color, x, y):
     screen.blit(text_surface, text_rect)
 
 def menu():
+    # Set up the screen
+    SCREEN_WIDTH = 800
+    SCREEN_HEIGHT = 520
+    global screen
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption('PEMDAS CHESS GAME')
+
+    clock = pygame.time.Clock()
     running = True
     while running:
         for event in pygame.event.get():
@@ -53,7 +111,7 @@ def menu():
         button_height = 50
         button_spacing = 70
         play_button_rect = pygame.Rect((SCREEN_WIDTH - button_width) // 2, 200, button_width, button_height)
-        pygame.draw.rect(screen, BLUE, play_button_rect)
+        pygame.draw.rect(screen, BLACK, play_button_rect)
         draw_text("PLAY", font_normal, WHITE, play_button_rect.centerx, play_button_rect.centery)
 
         help_button_rect = pygame.Rect((SCREEN_WIDTH - button_width) // 2, 200 + button_spacing, button_width, button_height)
@@ -85,7 +143,7 @@ def keluar():
     pygame.quit()
 
 if __name__ == '__main__':
-    menu()
+    login()
 
 # """
 # MAIN MENU UNTUK PROGRAM CATUR
