@@ -117,6 +117,9 @@ def drawSidebar(screen, gs):
             black_move_surface = small_font.render(gs.moveLog[i + 1].getChessNotation(), True, p.Color('black'))
             screen.blit(black_move_surface, (TINGGI + 150, move_y))
 
+        if gs.checkMate == True:
+            exit()
+
         move_y += 30
 
 def exit():
