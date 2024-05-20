@@ -118,8 +118,12 @@ def drawSidebar(screen, gs):
             black_move_surface = small_font.render(gs.moveLog[i + 1].getChessNotation(), True, p.Color('black'))
             screen.blit(black_move_surface, (TINGGI + 150, move_y))
 
-        if gs.checkMate == True:
-            exit()
+        """
+        sistem checkmate/stale nanti terapkan terpisah dari drawsidebar
+        """
+        # if gs.checkMate == True:
+        #     isCheck = font.render('Checkmate', True, p.Color('black'))
+        #     screen.blit(isCheck, (TINGGI + 20, 20))
 
         move_y += 30
 
