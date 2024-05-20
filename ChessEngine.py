@@ -83,7 +83,7 @@ class GameState():
                 self.board[move.startRow][move.endCol] = move.pieceCaptured
                 self.enpassantPossible = (move.endRow, move.endCol)
             #undo a 2 square advances
-            if move.pieceMoved[1] == 'p' and abs(move.startRow - move.endCol) == 2:
+            if move.pieceMoved[1] == 'p' and abs(move.startRow - move.endRow) == 2:
                 self.enpassantPossible = ()
             #undo castling rights
             self.castleRightsLog.pop() #get rid of the new castle rights from the move we are undoing
