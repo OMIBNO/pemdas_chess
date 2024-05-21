@@ -1,5 +1,5 @@
 import pygame
-import ChessMain
+import ChessMain, ChessMain_2
 import customtkinter as ctk
 from CTkMessagebox import CTkMessagebox
 import time
@@ -16,7 +16,6 @@ kanade_img = pygame.transform.scale(pygame.image.load('img/bg.png'), (800, 520))
 # Set up fonts
 font_large = pygame.font.Font(None, 43)
 font_normal = pygame.font.Font(None, 22)
-
 def draw_text(text, font, color, x, y):
     text_surface = font.render(text, True, color)
     text_rect = text_surface.get_rect()
@@ -31,7 +30,6 @@ def menu():
     global screen
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption('PEMDAS CHESS GAME')
-
     global clock
     clock = pygame.time.Clock()
     running = True
@@ -40,8 +38,10 @@ def menu():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if play_button_rect.collidepoint(event.pos):
+                if play_button1_rect.collidepoint(event.pos):
                     ChessMain.main()
+                elif play_button2_rect.collidepoint(event.pos):
+                    ChessMain_2.main()
                 elif help_button_rect.collidepoint(event.pos):
                     manual()
                 elif exit_button_rect.collidepoint(event.pos):
@@ -57,15 +57,19 @@ def menu():
         button_width = 200
         button_height = 50
         button_spacing = 70
-        play_button_rect = pygame.Rect((SCREEN_WIDTH - button_width) // 2, 200, button_width, button_height)
-        pygame.draw.rect(screen, BLACK, play_button_rect)
-        draw_text("PLAY", font_normal, WHITE, play_button_rect.centerx, play_button_rect.centery)
+        play_button1_rect = pygame.Rect((SCREEN_WIDTH - button_width) // 2, 200, button_width, button_height)
+        pygame.draw.rect(screen, BLACK, play_button1_rect)
+        draw_text("PLAY(Single Player)", font_normal, WHITE, play_button1_rect.centerx, play_button1_rect.centery)
 
-        help_button_rect = pygame.Rect((SCREEN_WIDTH - button_width) // 2, 200 + button_spacing, button_width, button_height)
+        play_button2_rect = pygame.Rect((SCREEN_WIDTH - button_width) // 2, 200 + button_spacing, button_width, button_height)
+        pygame.draw.rect(screen, BLACK, play_button2_rect)
+        draw_text("PLAY(Multi Player)", font_normal, WHITE, play_button2_rect.centerx, play_button2_rect.centery)
+
+        help_button_rect = pygame.Rect((SCREEN_WIDTH - button_width) // 2, 200 + 2 * button_spacing, button_width, button_height)
         pygame.draw.rect(screen, BLUE, help_button_rect)
         draw_text("MANUAL(Help)", font_normal, WHITE, help_button_rect.centerx, help_button_rect.centery)
 
-        exit_button_rect = pygame.Rect((SCREEN_WIDTH - button_width) // 2, 200 + 2 * button_spacing, button_width, button_height)
+        exit_button_rect = pygame.Rect((SCREEN_WIDTH - button_width) // 2, 200 + 3 * button_spacing, button_width, button_height)
         pygame.draw.rect(screen, BLUE, exit_button_rect)
         draw_text("EXIT", font_normal, WHITE, exit_button_rect.centerx, exit_button_rect.centery)
 

@@ -29,7 +29,7 @@ def main():
     playerClicks = [] #untuk mengetahui clicks, seperti click history
     gameOver = False
     playerOne = True
-    playerTwo = False
+    playerTwo = True
 
 
     # playerOne = True #if a human is playing white, then this will be True. If an AI is playing, then

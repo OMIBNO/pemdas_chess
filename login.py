@@ -2,7 +2,7 @@ import ChessMain
 import customtkinter as ctk
 from CTkMessagebox import CTkMessagebox
 import time
-import Main
+import Game_Main
 """
 LOGIN
 """
@@ -51,7 +51,7 @@ def proses_login():
 #load menu
 def load_menu():
     login_window.destroy()
-    Main.menu()
+    Game_Main.menu()
 
 #jika login berhasil(user dan password benar)
 def login_berhasil():

@@ -1,4 +1,4 @@
-import ChessMain
+import ChessMain, ChessMain_2
 
 class GameState():
     def __init__(self):
@@ -96,6 +96,7 @@ class GameState():
                 else: #queen side
                     self.board[move.endRow][move.endCol-2] = self.board[move.endRow][move.endCol+1]
                     self.board[move.endRow][move.endCol+1] = '--'
+
 
     #UPDATE THE CASTLE RIGHTS GIVEN THE MOVE
     def updateCastleRights(self, move):
