@@ -11,16 +11,24 @@ pygame.init()
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 BLUE = (0, 0, 255)
-kanade_img = pygame.transform.scale(pygame.image.load('img/bg.png'), (800, 520))
+fill_img = pygame.transform.scale(pygame.image.load('img/white_bg.jpg'), (800, 520))
+bg_img = pygame.transform.scale(pygame.image.load('img/smktelkomjkt_2.png'), (300, 300))
 
 # Set up fonts
-font_large = pygame.font.Font(None, 43)
-font_normal = pygame.font.Font(None, 22)
+font_large = pygame.font.SysFont('Monospace', 43)
+font_normal = pygame.font.SysFont('Monospace', 22)
 def draw_text(text, font, color, x, y):
     text_surface = font.render(text, True, color)
     text_rect = text_surface.get_rect()
     text_rect.center = (x, y)
     screen.blit(text_surface, text_rect)
+
+def draw_text_left(text, font, color, x, y):
+    text_surface = font.render(text, True, color)
+    text_rect = text_surface.get_rect()
+    text_rect.topleft = (x, y)  # Set the top left corner to the specified coordinates
+    screen.blit(text_surface, text_rect)
+
 
 def menu():
     # Set up the screen
@@ -48,13 +56,14 @@ def menu():
                     keluar()
 
         # Blit the background image
-        screen.blit(kanade_img, (0, 0))
+        screen.blit(fill_img, (0, 0))
+        screen.blit(bg_img, (230, 130))
 
         # Draw main menu label
-        draw_text("GAME CHESS KELOMPOK 1", font_large, WHITE, SCREEN_WIDTH // 2, 100)
+        draw_text("GAME CHESS KELOMPOK 1", font_large, BLACK, SCREEN_WIDTH // 2, 100)
 
         # Draw buttons
-        button_width = 200
+        button_width = 400
         button_height = 50
         button_spacing = 70
         play_button1_rect = pygame.Rect((SCREEN_WIDTH - button_width) // 2, 200, button_width, button_height)
@@ -85,8 +94,18 @@ def manual():
                 running = False
 
         screen.fill(BLACK)
-        draw_text(man_text, font_normal, WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+        # Informasi hotkey
+        draw_text_left(man_text, font_large, BLUE, 0, 0)
+        draw_text_left('Undo Move    = Z', font_normal, WHITE, 0, 45)
+        draw_text_left('Restart Game = R', font_normal, WHITE, 0, 70)
 
+        # Informasi kelompok
+        draw_text_left('ANGGOTA KELOMPOK', font_large, BLUE, 340, 0)
+        draw_text_left('1. Raihan Wiraseno Putra', font_normal, WHITE, 340, 45)
+        draw_text_left('2. Malvin Gunawan', font_normal, WHITE, 340, 70)
+        draw_text_left('3. Vinza Nur Akmal', font_normal, WHITE, 340, 95)
+        draw_text_left('4. Sabrina Azzahra', font_normal, WHITE, 340, 120)
+        draw_text_left('5. La Ode Aditya Rahman', font_normal, WHITE, 340, 145)
         pygame.display.flip()
         clock.tick(60)
 
